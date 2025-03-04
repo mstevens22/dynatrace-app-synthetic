@@ -1,0 +1,10 @@
+{
+  "environmentUrl": "https://sec51707.apps.dynatrace.com/",
+  "app": {
+    "name": "dynatrace-app-synthetic",
+    "version": "0.0.0",
+    "description": "A starting project with routing, fetching data, and charting",
+    "id": "my.dynatrace.app.synthetic",
+    "scopes": [{ "name": "storage:logs:read", "comment": "default template" }, { "name": "storage:buckets:read", "comment": "default template" }]
+  }
+}
