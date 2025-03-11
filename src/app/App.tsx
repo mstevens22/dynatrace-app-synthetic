@@ -1,22 +1,32 @@
-import { Page } from "@dynatrace/strato-components-preview/layouts";
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import { Data } from "./pages/Data";
-import { Header } from "./components/Header";
-import { Home } from "./pages/Home";
+import React from 'react';
+import {
+  Route,
+  Routes,
+  Link,
+} from 'react-router-dom';
+import {
+  Page,
+  AppHeader,
+} from '@dynatrace/strato-components-preview/layouts';
+import { AvailabilityCountry } from './pages/AvailabilityCountry';
 
 export const App = () => {
   return (
     <Page>
-      <Page.Header>
-        <Header />
-      </Page.Header>
+
       <Page.Main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/data" element={<Data />} />
+        <Routes>          
+          <Route path="/" element={<AvailabilityCountry />} />
         </Routes>
       </Page.Main>
     </Page>
   );
 };
+
+      /* <Page.Header>
+        <AppHeader>
+          <AppHeader.NavItems>
+            <AppHeader.NavItem as={Link} to="/" >Availibity per Country</AppHeader.NavItem>
+          </AppHeader.NavItems>
+        </AppHeader>
+      </Page.Header> */
