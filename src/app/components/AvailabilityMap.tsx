@@ -34,7 +34,7 @@ export const AvailabilityMap = ({countrySelection, filters}) => {
               <ChoroplethLayer.Tooltip>
                 {(regionData: ChoroplethLayerTooltipData<CountryStat>) => {            
                     return (
-                    <Tooltip.Body>
+                    <Tooltip.Body >
                         <Tooltip.Item>
                         <Tooltip.Content>
                             <Tooltip.Text variant="secondary">{regionData.data.country}</Tooltip.Text>

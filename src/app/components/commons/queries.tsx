@@ -60,4 +60,5 @@ export const getExecutionsByScenarioStepCountry = (country, filters) => `timeser
 | fieldsAdd availabilityRate = if(isNull(executionSuccess) and isNull(right.executionFail), 0, else: if(isNull(executionSuccess), 0, else: if(isNull(right.executionFail), 100, else: arrayAvg(availability)*100)))
 | fieldsKeep stepName, dt.entity.synthetic_test_step, dt.entity.synthetic_test, dt.entity.synthetic_test.name, executionSuccess, right.executionFail, availabilityRate
 | fieldsRename step = dt.entity.synthetic_test_step,scenarioId = dt.entity.synthetic_test, scenarioName = dt.entity.synthetic_test.name, executionFail = right.executionFail
-| fieldsAdd scenarioName = trim(splitString(scenarioName, " - ")[2])`;
+| fieldsAdd scenarioName = trim(splitString(scenarioName, " - ")[2])
+| sort stepName asc`;

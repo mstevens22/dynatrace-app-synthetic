@@ -64,7 +64,7 @@ executionsByScenarioStepCountry?.data?.records.forEach((step) => {
             });
     }
 });
-//Define scenario availability based on steps vaailability
+//Define parent scenario availability based on steps availability
 function updateAvailability(scenarios: Scenario[]) {
     scenarios.forEach(scenario => {
       if (scenario.subRows.length > 0) {
@@ -78,7 +78,7 @@ function updateAvailability(scenarios: Scenario[]) {
   }
 // Mise à jour des données
 updateAvailability(scenario);
-      
+    
     const columns: TableColumn[] = [
         {
             header: 'Scenario',
@@ -106,74 +106,29 @@ updateAvailability(scenario);
             {availabilityByScenario.isLoading && <ProgressCircle />}
       {availabilityByScenario.data && (
         <DataTable data={scenario} columns={columns} variant={tableVariant} rowThresholds={[
-            {rules: [
-                    {
-                        id: 'availability',
-                        value: 0,
-                        comparator: 'greater-than-or-equal-to',                        
-                      },
-                  {
-                    id: 'availability',
-                    value: 75,
-                    comparator: 'less-than',
-                  },
-                ],
-                color: Colors.Charts.CategoricalThemed.Fireplace.Color06.Default,
-              },
-              {rules: [
-                {
-                    id: 'availability',
-                    value: 75,
-                    comparator: 'greater-than-or-equal-to', 
-                  },
-                {
-                    id: 'availability',
-                    value: 95,
-                    comparator: 'less-than',
-                },
-            ],
-                color: Colors.Charts.Status.Critical.Default,
-            },
-            {rules: [
-                {
-                    id: 'availability',
-                    value: 95,
-                    comparator: 'greater-than-or-equal-to', 
-                },
-            {
-                id: 'availability',
-                value: 98,
-                comparator: 'less-than',
-            },
-            ],
-            color: Colors.Charts.Status.Warning.Default,
-        },
-      {rules: [
-        {
+          {
             id: 'availability',
             value: 98,
-            comparator: 'greater-than-or-equal-to', 
+            comparator: 'greater-than-or-equal-to',
+            color: Colors.Charts.Status.Ideal.Default
           },
-      {
-        id: 'availability',
-        value: 100,
-        comparator: 'less-than-or-equal-to',
-      },
-    ],
-    color: Colors.Charts.Status.Ideal.Default,
-  },
-          ]}>
+          {
+            id: 'availability',
+            value: 98,
+            comparator: 'less-than',
+            color: Colors.Charts.Status.Critical.Default
+          } ]}>
             <DataTable.UserActions>
           <DataTable.RowActions>
               {(row: TableRow) => (
-                <>
+                  !(row.original.id as string)?.includes("TEST_STEP") ? (
                 <IntentButton
                   appId="dynatrace.synthetic"
                   intentId="view_monitor_list_filtered_by_monitor_ids"
                   payload={{
                     'dt.synthetic.monitor_ids': [row.original.id],
                   }}
-                /></>
+                />):null
               )}
             </DataTable.RowActions>
             </DataTable.UserActions>
