@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Flex } from '@dynatrace/strato-components/layouts';
 import Colors from '@dynatrace/strato-design-tokens/colors';
 import { ProgressCircle } from '@dynatrace/strato-components/content';
@@ -6,6 +6,8 @@ import { units } from '@dynatrace-sdk/units';
 import { IntentButton } from '@dynatrace/strato-components/buttons';
 import {
     DataTable,
+    DataTableV2,
+    DataTableV2ColumnDef,
     TableRow,
     TableVariantConfig
   } from '@dynatrace/strato-components-preview/tables';
@@ -79,105 +81,109 @@ function updateAvailability(scenarios: Scenario[]) {
 // Mise à jour des données
 updateAvailability(scenario);
       
-    const columns: TableColumn[] = [
+const columns = useMemo<DataTableV2ColumnDef<(typeof scenario)[number]>[]>(
+  () => [
         {
             header: 'Scenario',
+            id: 'scenario',
             accessor: 'name',
-            ratioWidth: 3,
+            width: 'content'
           },
           {
             header: 'Availability',
             accessor: 'availability',
-            ratioWidth: 1,
+            id: 'availability',        
             formatter: { input: units.percentage.percent },
-          }
-      ];
-
-        //Table styling
-  const tableVariant: TableVariantConfig = {
-    rowDensity: 'comfortable',
-    rowSeparation: 'zebraStripes',
-    verticalDividers: true,
-    contained: true,
-  };
+            width: 'content'
+          }          
+        ],
+        []
+      );      
 
     return (         
         <Flex width="100%" flexDirection="column" justifyContent="center" gap={16}>
             {availabilityByScenario.isLoading && <ProgressCircle />}
       {availabilityByScenario.data && (
-        <DataTable data={scenario} columns={columns} variant={tableVariant} rowThresholds={[
-            {rules: [
-                    {
-                        id: 'availability',
-                        value: 0,
-                        comparator: 'greater-than-or-equal-to',                        
-                      },
+        <DataTableV2 fullWidth data={scenario} columns={columns} subRows rowThresholds={[
+          {rules: [
                   {
-                    id: 'availability',
-                    value: 75,
-                    comparator: 'less-than',
-                  },
-                ],
-                color: Colors.Charts.CategoricalThemed.Fireplace.Color06.Default,
-              },
-              {rules: [
+                      accessor: 'availability',
+                      value: 0,
+                      comparator: 'greater-than-or-equal-to',                                             
+                    },
                 {
-                    id: 'availability',
-                    value: 75,
-                    comparator: 'greater-than-or-equal-to', 
-                  },
-                {
-                    id: 'availability',
-                    value: 95,
-                    comparator: 'less-than',
+                  accessor: 'availability',
+                  value: 75,
+                  comparator: 'less-than'
                 },
-            ],
-                color: Colors.Charts.Status.Critical.Default,
+              ],
+              color: Colors.Charts.CategoricalThemed.Fireplace.Color06.Default,
+              type: 'pill',
             },
             {rules: [
-                {
-                    id: 'availability',
-                    value: 95,
-                    comparator: 'greater-than-or-equal-to', 
+              {
+                accessor: 'availability',
+                  value: 75,
+                  comparator: 'greater-than-or-equal-to', 
                 },
-            {
-                id: 'availability',
-                value: 98,
-                comparator: 'less-than',
-            },
-            ],
-            color: Colors.Charts.Status.Warning.Default,
-        },
-      {rules: [
-        {
-            id: 'availability',
-            value: 98,
-            comparator: 'greater-than-or-equal-to', 
+              {
+                accessor: 'availability',
+                  value: 95,
+                  comparator: 'less-than',
+              },
+          ],
+              color: Colors.Charts.Status.Critical.Default,
+              type: 'pill',
           },
-      {
-        id: 'availability',
-        value: 100,
-        comparator: 'less-than-or-equal-to',
+          {rules: [
+              {
+                accessor: 'availability',
+                  value: 95,
+                  comparator: 'greater-than-or-equal-to',                  
+              },
+          {
+            accessor: 'availability',
+              value: 98,
+              comparator: 'less-than',
+          },
+          ],
+          color: Colors.Charts.Status.Warning.Default,
+          type: 'pill',
       },
-    ],
-    color: Colors.Charts.Status.Ideal.Default,
-  },
-          ]}>
-            <DataTable.UserActions>
-          <DataTable.RowActions>
-              {(row: TableRow) => (
-                <>
-                <IntentButton
+    {rules: [
+      {
+        accessor: 'availability',
+          value: 98,
+          comparator: 'greater-than-or-equal-to', 
+        },
+    {
+      accessor: 'availability',
+      value: 100,
+      comparator: 'less-than-or-equal-to',
+    },
+  ],
+  color: Colors.Charts.Status.Ideal.Default,
+  type: 'pill',
+},
+        ]} variant = {{
+          rowDensity: 'comfortable',
+          rowSeparation: 'zebraStripes',
+          verticalDividers: true,
+          contained: true,
+        }}><DataTableV2.RowActions>
+        {(row) => (
+             !(row.id as string)?.includes("TEST_STEP") ? (
+            <IntentButton
                   appId="dynatrace.synthetic"
                   intentId="view_monitor_list_filtered_by_monitor_ids"
                   payload={{
-                    'dt.synthetic.monitor_ids': [row.original.id],
+                    'dt.synthetic.monitor_ids': [row.id],
                   }}
-                /></>
-              )}
-            </DataTable.RowActions>
-            </DataTable.UserActions>
-          </DataTable>
+                />
+              ):<></>
+        )}
+      </DataTableV2.RowActions>
+      </DataTableV2>
       )}
         </Flex>
           );    
