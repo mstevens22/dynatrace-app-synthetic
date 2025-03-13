@@ -5,11 +5,8 @@ import { ProgressCircle } from '@dynatrace/strato-components/content';
 import { units } from '@dynatrace-sdk/units';
 import { IntentButton } from '@dynatrace/strato-components/buttons';
 import {
-    DataTable,
     DataTableV2,
-    DataTableV2ColumnDef,
-    TableRow,
-    TableVariantConfig
+    DataTableV2ColumnDef
   } from '@dynatrace/strato-components-preview/tables';
 import type { TableColumn } from '@dynatrace/strato-components-preview/tables';
 import { useQueriesWithCache } from "./commons/useQueriesWithCache";
